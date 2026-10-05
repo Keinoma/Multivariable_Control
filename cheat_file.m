@@ -26,6 +26,30 @@ function Mr = isctr(A, B)
 end
 
 
+function n_obtained = PBH_obs_test(A, C, n_needed)
+    lambdas = eig(A);
+    for i = 1:length(lambdas)
+        M = [lambdas(i)*eye(n_needed)-A ;
+            C];
+        n_obtained = rank(M);
+        if n_obtained ~= n_needed
+            fprintf('Unobservable mode at lambda = %.4f\n', lambdas(i));
+        end
+    end
+end
+
+
+function n_obtained = PBH_rch_test(A, B, n_needed)
+    lambdas = eig(A);
+    for i = 1:length(lambdas)
+        M = [lambdas(i)*eye(n_needed)-A B];
+        n_obtained = rank(M);
+        if n_obtained ~= n_needed
+            fprintf('Unreachable mode at lambda = %.4f\n', lambdas(i));
+        end
+    end
+end
+
 
 function [V, Z, iTr, Tr, hA, hB] = T_ctrl(Mr, A, B)
     V = orth(Mr);
